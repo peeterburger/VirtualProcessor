@@ -37,7 +37,7 @@ func (p *Pin) PowerSupply() {
 	p.state = StatePowerSupply
 }
 
-// PowerSupply sets the current state of the pin to Mass
+// Mass sets the current state of the pin to Mass
 func (p *Pin) Mass() {
 	p.state = StateMass
 }
@@ -80,8 +80,8 @@ func (p *Pin) recOutput(sourcePin *Pin) bool {
 	}
 
 	// determines emitter output
-	if p == root.emitter {
-		if root.collector.recOutput(p) && root.base.recOutput(p) {
+	if p == root.Emitter {
+		if root.Collector.recOutput(p) && root.Base.recOutput(p) {
 			return true
 		}
 	}

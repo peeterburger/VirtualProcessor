@@ -6,18 +6,18 @@ import "fmt"
 // Emitter. It represents a physical Transistor and therefore requires some kind
 // of power supply and a binary input on the Base-Pin to function.
 type Transistor struct {
-	collector *Pin
-	base      *Pin
-	emitter   *Pin
+	Collector *Pin
+	Base      *Pin
+	Emitter   *Pin
 }
 
 // New returns a pointer to a newly created Transistor with default
 // initialization values.
 func New() *Transistor {
 	t := Transistor{}
-	t.collector = &Pin{root: &t}
-	t.base = &Pin{root: &t}
-	t.emitter = &Pin{root: &t}
+	t.Collector = &Pin{root: &t}
+	t.Base = &Pin{root: &t}
+	t.Emitter = &Pin{root: &t}
 	return &t
 }
 
@@ -25,13 +25,11 @@ func main() {
 	t1 := New()
 	t2 := New()
 
-	t1.emitter.ConnectTo(t2.emitter)
+	t1.Emitter.ConnectTo(t2.Collector)
+	t1.Collector.PowerSupply()
 
-	t1.collector.PowerSupply()
-	t2.collector.PowerSupply()
+	t1.Base.Input(true)
+	t2.Base.Input(true)
 
-	t1.base.Input(true)
-	t2.base.Input(true)
-
-	fmt.Println(t2.emitter.Output())
+	fmt.Println(t1.Collector.Output())
 }
