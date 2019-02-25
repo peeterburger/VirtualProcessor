@@ -2,13 +2,18 @@ package main
 
 import "fmt"
 
+// Transistor is a struct containing pointers to three pins: Base, Collector and
+// Emitter. It represents a physical Transistor and therefore requires some kind
+// of power supply and a binary input on the Base-Pin to function.
 type Transistor struct {
 	collector *Pin
 	base      *Pin
 	emitter   *Pin
 }
 
-func NewTransistor() *Transistor {
+// New returns a pointer to a newly created Transistor with default
+// initialization values.
+func New() *Transistor {
 	t := Transistor{}
 	t.collector = &Pin{root: &t}
 	t.base = &Pin{root: &t}
@@ -17,16 +22,16 @@ func NewTransistor() *Transistor {
 }
 
 func main() {
-	t1 := NewTransistor()
-	t2 := NewTransistor()
+	t1 := New()
+	t2 := New()
 
 	t1.emitter.ConnectTo(t2.emitter)
-	
-	t1.collector.POWER_SUPPLY()
-	t2.collector.POWER_SUPPLY()
 
-	t1.base.INPUT(false)
-	t2.base.INPUT(false)
+	t1.collector.PowerSupply()
+	t2.collector.PowerSupply()
 
-	fmt.Println(t2.emitter.OUTPUT())
+	t1.base.Input(true)
+	t2.base.Input(true)
+
+	fmt.Println(t2.emitter.Output())
 }

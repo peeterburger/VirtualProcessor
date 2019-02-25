@@ -1,5 +1,7 @@
 package main
 
+// Pin is a struct containing an array with pointers to other connected pins, a
+// pointer to the pins root/parent element and a specivic state
 type Pin struct {
 	connected []*Pin
 	root      *Transistor
@@ -7,45 +9,54 @@ type Pin struct {
 }
 
 const (
-	STATE_FALSE        uint8 = 0
-	STATE_TRUE         uint8 = 1
-	STATE_POWER_SUPPLY uint8 = 2
-	STATE_MASS         uint8 = 3
+	// StateFalse -> 0
+	StateFalse uint8 = 0
+	// StateTrue -> 1
+	StateTrue uint8 = 1
+	// StatePowerSupply -> 2
+	StatePowerSupply uint8 = 2
+	// StateMass -> 3
+	StateMass uint8 = 3
 )
 
+// ConnectTo connects two pins
 func (p *Pin) ConnectTo(remotePin *Pin) {
 	p.connected = append(p.connected, remotePin)
 	remotePin.connected = append(remotePin.connected, p)
 }
 
-func (p *Pin) INPUT(input_state bool) {
-	if input_state {
-		p.state = STATE_TRUE
+// Input sets the current state of the pin to true/false
+func (p *Pin) Input(inputState bool) {
+	if inputState {
+		p.state = StateTrue
 	}
 }
 
-func (p *Pin) POWER_SUPPLY() {
-	p.state = STATE_POWER_SUPPLY
+// PowerSupply sets the current state of the pin to PowerSupply
+func (p *Pin) PowerSupply() {
+	p.state = StatePowerSupply
 }
 
-func (p *Pin) MASS() {
-	p.state = STATE_MASS
+// PowerSupply sets the current state of the pin to Mass
+func (p *Pin) Mass() {
+	p.state = StateMass
 }
 
-func (p *Pin) OUTPUT() bool {
+// Output recursively calculates the output on the current pin
+func (p *Pin) Output() bool {
 	return p.recOutput(nil)
 }
 
 func (p *Pin) recOutput(sourcePin *Pin) bool {
 	// fetch and evaluate pin state
 	switch p.state {
-	case STATE_FALSE:
+	case StateFalse:
 		break
-	case STATE_TRUE:
+	case StateTrue:
 		return true
-	case STATE_POWER_SUPPLY:
+	case StatePowerSupply:
 		return true
-	case STATE_MASS:
+	case StateMass:
 		return false
 	}
 
